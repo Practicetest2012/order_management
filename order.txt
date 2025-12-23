@@ -1,0 +1,8 @@
+1.fetech the user order
+GET: /user/{userid}/orders
+2.Create the order from customer
+POST: /orders
+3.fetch bill
+GET:/bill/
+4.payment
+PUT:/status

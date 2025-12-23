@@ -1,0 +1,19 @@
+http verb
+get 
+post
+put
+delete
+patch
+examples of the end points:
+1- fetch allthe post
+GET: /posts
+2- fetch a specific post
+GET: /posts/{postid}
+3- create a new post
+POST: /posts
+4- update the post
+PUT: /posts/{postid}
+5- delete the post
+DELETE: /posts/{postid}
+
+
