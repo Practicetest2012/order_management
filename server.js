@@ -1,38 +1,30 @@
-import express from 'express';
-import routes from './route.js';
-import cors from 'cors'
-import { init, closeConnection } from './src/db/db.js'
+import bcrypt from "bcrypt";
+import { getDb } from "../db/db.js";
 
+async function login(userId, password) {
+    try {
+        if (!userId || !password) {
+            throw new Error("UserId and password are required");
+        }
 
-const app = express();
+        const db = getDb();
+        const collection = db.collection("login");
 
-app.use(cors());
-app.use(express.json());
+        // Find user by userId only
+        const user = await collection.findOne({ userId: userId });
 
-// Use the routes
-app.use('/', routes);
+        if (!user) {
+            return false;
+        }
 
-(async () => {
-  const db = await init();
-  const port = 3001;
+        // Compare password with hashed password in DB
+        const isMatch = await bcrypt.compare(password, user.password);
 
-  const server = app.listen(port, () => {
-    console.log(`My apis are listening at port: ${port}`)
-
-    const shutdown = async () => {
-      console.log("shutting down...");
-      server.close(async () => {
-        await closeConnection();
-        process.exit(0);
-      })
+        return isMatch;
+    } catch (error) {
+        console.error("Login failed:", error.message);
+        return false;
     }
+}
 
-    process.on('SIGINT', shutdown)
-    process.on('SIGTERM', shutdown)
-
-  })
-  
-
-})()
-
-
+export { login };
