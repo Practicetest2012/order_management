@@ -7,7 +7,6 @@ async function getUserById(userId){
      console.log(userId)
     const db = getDb()
     const collection = await db.collection("users")
-    
     const result =  await collection.findOne({userId : userId})
      
     return result
